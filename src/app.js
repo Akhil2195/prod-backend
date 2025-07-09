@@ -15,4 +15,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use('/api/v1/healthCheck',healthCheckRoute);
+app.get('/api/v1', (req,res) => {
+    res.send(`API is running on port ${process.env.PORT}`);
+});
+app.get('/api/v1/deploy', (req,res) => {
+    res.send(`deploy testing using github actions`);
+})
 export { app };
