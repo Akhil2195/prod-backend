@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: 🔍 Check if secret is injected (masked)
+        run: echo  "SSH key: ${{ secrets.SSH_PRIVATE_KEY }}"
+        
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
