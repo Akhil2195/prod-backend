@@ -1,0 +1,25 @@
+name: 🚀 Auto Deploy to Localhost on Push to Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    name: Deploy to Localhost via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd "${{ secrets.APP_DIR }}"
+            git pull origin dev
+            docker-compose down
+            docker-compose build
+            docker-compose up -d
