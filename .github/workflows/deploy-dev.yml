@@ -1,29 +1,8 @@
-name: 🚀 Full SSH Workflow Test
-
-on:
-  push:
-    branches:
-      - dev
-
-jobs:
-  test-ssh:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 🔍 Echo debug info
-        run: |
-          echo "🔐 SSH key: ${{ secrets.SSH_PRIVATE_KEY }}"
-          echo "👤 SSH user: akhil"
-          echo "🌐 SSH server IP: 127.0.0.1"
-
-      - name: 🚀 Test SSH connection to local server
-        uses: appleboy/ssh-action@master
-        with:
-          host: 127.0.0.1
-          username: akhil
-          port: 22
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            echo "✅ SSH connected!"
-            whoami
-            hostname
+- name: 🚀 Test SSH connection to local server
+  uses: appleboy/ssh-action@master
+  with:
+    host: 127.0.0.1
+    username: akhil
+    key: ${{ secrets.SSH_PRIVATE_KEY }}
+    port: 22
+    script: whoami
