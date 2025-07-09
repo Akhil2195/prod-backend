@@ -14,17 +14,17 @@ jobs:
       - name: 🔍 Check if secret is injected (masked)
         run: echo "SSH key present? -> ${{ secrets.SSH_PRIVATE_KEY != '' }}"
 
-      - name: 🚀 Test SSH connection to local server
-        uses: appleboy/ssh-action@master
-        with:
-          host: 127.0.0.1
-          username: akhil
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "✅ SSH connection successful!"
-            whoami
-            cd /d/projects/your-node-project  # Replace this with your actual project path
-            git pull origin dev
-            docker compose down
-            docker compose up -d --build
+      # - name: 🚀 Test SSH connection to local server
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: 127.0.0.1
+      #     username: akhil
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     port: 22
+      #     script: |
+      #       echo "✅ SSH connection successful!"
+      #       whoami
+      #       cd /d/projects/your-node-project  # Replace this with your actual project path
+      #       git pull origin dev
+      #       docker compose down
+      #       docker compose up -d --build
