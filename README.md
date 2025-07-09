@@ -1,1 +1,1 @@
-This is a sample backend project for testing prupose
+This is a sample backend project for testing prupose.
