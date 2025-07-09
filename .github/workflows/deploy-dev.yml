@@ -1,4 +1,16 @@
-- name: 🚀 Test SSH connection to local server
+name: 🚀 Full SSH Workflow Test
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚀 Test SSH connection to local server
   uses: appleboy/ssh-action@master
   with:
     host: 127.0.0.1
