@@ -1,4 +1,4 @@
-name: 🚀 Auto Deploy to Localhost on Push to Dev
+name: 🚀 Auto Deploy Dev via SSH
 
 on:
   push:
@@ -7,22 +7,24 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to Localhost via SSH
+    name: Deploy on Localhost via SSH
     runs-on: ubuntu-latest
 
     steps:
       - name: 🔍 Check if secret is injected (masked)
-        run: echo  "SSH key: ${{ secrets.SSH_PRIVATE_KEY }}"
-        
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd "${{ secrets.APP_DIR }}"
-            git pull origin dev
-            docker-compose down
-            docker-compose build
-            docker-compose up -d
+        run: echo "SSH key present? -> ${{ secrets.SSH_PRIVATE_KEY != '' }}"
+
+      # - name: 🚀 Test SSH connection to local server
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: 127.0.0.1
+      #     username: akhil
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     port: 22
+      #     script: |
+      #       echo "✅ SSH connection successful!"
+      #       whoami
+      #       cd /d/projects/your-node-project  # Replace this with your actual project path
+      #       git pull origin dev
+      #       docker compose down
+      #       docker compose up -d --build
