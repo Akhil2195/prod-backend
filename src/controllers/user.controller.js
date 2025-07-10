@@ -2,6 +2,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import User from "../models/User.model.js";
+import fs from 'fs';
+import path from "path";
+import { uploadFiletoS3 , getFileFromS3 , getBucketFiles , getPaginatedFilesFromS3, deleteImageFroms3} from '../utils/amazon.services.js';
+
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -58,13 +62,23 @@ const userLogin = asyncHandler(async (req, res, next) => {
 });
 
 const registerUser = asyncHandler( async (req, res, next) => {
-    const { name, email, password, role , profileImage } = req.body;
+    const { name, email, password, role } = req.body;
+    let profileImage;
+    if(req.file) {
+      const filePath = path.resolve(`public/temp/${req.file.filename}`);
+      const folder = 'user';
+      const key = `${folder}/${req.file.filename}`;
+        const fileUploaded = await uploadFiletoS3(filePath, key);
+        if(fileUploaded.$metadata.httpStatusCode === 200) {
+          profileImage = key;
+        }
+    }
 
-    // if (
-    //     [name, email, password, role].some((field) => field?.trim() === "")
-    // ) {
-    //     throw new ApiError(400, "All fields are required")
-    // }
+    if (
+        [name, email, password, role].some((field) => field?.trim() === "")
+    ) {
+        throw new ApiError(400, "All fields are required")
+    }
 
      const existedUser = await User.findOne({
         $or: [{ name }, { email }]
@@ -92,7 +106,22 @@ const registerUser = asyncHandler( async (req, res, next) => {
     )
 });
 
+const userList = asyncHandler(async (req,res,next) => {
+  try {
+    const users = await User.find();
+    for (let user of users) {
+      if(user.profileImage) {
+        user.profileImage =  await getFileFromS3(user.profileImage);
+      }
+    }
+    return res.status(200).json(new ApiResponse(200, users, "Users fetched successfully"))
+  } catch(err) {
+    return res.status(500).json(new ApiError(500, err, "Something went wrong"))
+  }
+});
+
 export {
     userLogin,
-    registerUser
+    registerUser,
+    userList,
 }
