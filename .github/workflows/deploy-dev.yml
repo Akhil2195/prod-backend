@@ -18,7 +18,7 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: npm test
+        run: npm run test
 
   deploy:
     name: Deploy on Localhost via SSH
