@@ -3,7 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import User from "../models/User.model.js";
 import fs from 'fs';
-import path from "path";
+import path, { extname as _extname } from "path";
 import { uploadFiletoS3 , getFileFromS3 , getBucketFiles , getPaginatedFilesFromS3, deleteImageFroms3} from '../utils/amazon.services.js';
 
 const generateAccessAndRefereshTokens = async (userId) => {
@@ -26,7 +26,10 @@ const generateAccessAndRefereshTokens = async (userId) => {
 
 const userLogin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(`email`, email);
+  console.log(`password`, password);
   const user = await User.findOne({ email });
+  console.log(`user`, user);
   if (!user) {
     throw new ApiError(401, "Invalid user credentials");
   }
@@ -67,11 +70,16 @@ const registerUser = asyncHandler( async (req, res, next) => {
     if(req.file) {
       const filePath = path.resolve(`public/temp/${req.file.filename}`);
       const folder = 'user';
-      const key = `${folder}/${req.file.filename}`;
-        const fileUploaded = await uploadFiletoS3(filePath, key);
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const fileName = `${uniqueSuffix}${_extname(req.file.originalname)}`;
+      const key = `${folder}/${fileName}`;
+      const file = req.file;
+        const fileUploaded = await uploadFiletoS3(file, key);
         if(fileUploaded.$metadata.httpStatusCode === 200) {
           profileImage = key;
         }
+    } else {
+      return res.status(400).json(new ApiError(400, "Image is required"));
     }
 
     if (

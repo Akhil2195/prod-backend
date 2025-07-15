@@ -32,7 +32,7 @@ const limits = {
 
 // Multer upload instance
 const upload = multer({
-  storage,
+  storage : multer.memoryStorage(),
   fileFilter,
   limits,
 });

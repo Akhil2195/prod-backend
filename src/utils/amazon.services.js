@@ -65,23 +65,23 @@ const getImageUrl = async (key) => {
 
 const uploadFiletoS3 = async (filePath, key) => {
   try {
-    const fileStream = fs.createReadStream(filePath);
+    // const fileStream = fs.createReadStream(filePath);
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: key,
-      Body: fileStream,
+      Body: filePath.buffer, //fileStream,
     });
     const response = await s3Client.send(command);
 
-    if (fs.existsSync(filePath)) {
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error("Error deleting file:", err);
-        } else {
-          console.log("File deleted successfully.");
-        }
-      });
-    }
+    // if (fs.existsSync(filePath)) {
+    //   fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //       console.error("Error deleting file:", err);
+    //     } else {
+    //       console.log("File deleted successfully.");
+    //     }
+    //   });
+    // }
     return response;
   } catch (err) {
     console.log(`error in uploading file to s3`, err);
