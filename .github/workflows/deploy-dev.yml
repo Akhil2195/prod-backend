@@ -4,10 +4,7 @@ name: Auth Tests
 on:
   push:
     branches:
-      - 'auth/**'  # Matches branches like auth/feature, auth/login-fix, etc.
-  pull_request:
-    branches:
-      - main
+      - 'auth'  # Matches branches like auth/feature, auth/login-fix, etc.
 
 jobs:
   test:
