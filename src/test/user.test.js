@@ -13,6 +13,8 @@ describe('User API', () => {
           password: 'Admin@1234',
         });
 
+      console.log(`response`, JSON.stringify(response, null,2)); 
+
       // ✅ Assert success
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
