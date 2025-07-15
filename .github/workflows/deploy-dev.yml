@@ -11,6 +11,12 @@ jobs:
     name: Run Jest Tests
     runs-on: ubuntu-latest
 
+    env: # 👈 Load .env equivalents
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      PORT: 4000
+
     steps:
       # Checkout the repository code
       - name: Checkout code
