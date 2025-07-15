@@ -1,46 +1,35 @@
-name: 🚀 Auto Deploy Dev via SSH
+name: Auth Tests
 
+# Trigger the workflow on pushes to auth-related branches and pull requests targeting main
 on:
   push:
     branches:
-      - dev
+      - 'auth/**'  # Matches branches like auth/feature, auth/login-fix, etc.
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  auth_tests:
-    name: Run Auth Tests
+  test:
+    name: Run Jest Tests
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository code
       - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: auth
+        uses: actions/checkout@v4
 
+      # Set up Node.js (use the version from your project, e.g., 18.x)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'  # Cache npm dependencies for faster runs
+
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      - name: Run auth tests
-        run: npm run test
-
-  # deploy:
-  #   name: Deploy on Localhost via SSH
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: 🔍 Check if secret is injected (masked)
-  #       run: echo "SSH key present? -> ${{ secrets.SSH_PRIVATE_KEY != '' }}"
-
-      # - name: 🚀 Test SSH connection to local server
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: 127.0.0.1
-      #     username: akhil
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     port: 22
-      #     script: |
-      #       echo "✅ SSH connection successful!"
-      #       whoami
-      #       cd /d/projects/your-node-project  # Replace this with your actual project path
-      #       git pull origin dev
-      #       docker compose down
-      #       docker compose up -d --build
+      # Run Jest tests with experimental VM modules for ES modules
+      - name: Run Jest tests
+        run: npx jest --no-warnings --experimental-vm-modules
