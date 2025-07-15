@@ -6,6 +6,20 @@ on:
       - dev
 
 jobs:
+  unit_tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests
+        run: npm run test
+
   deploy:
     name: Deploy on Localhost via SSH
     runs-on: ubuntu-latest
