@@ -29,4 +29,4 @@ jobs:
 
       # Run Jest tests with experimental VM modules for ES modules
       - name: Run Jest tests
-        run: npx jest --no-warnings --experimental-vm-modules
+        run: npm run test
