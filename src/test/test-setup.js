@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 
 beforeAll(async () => {
   const dbUri = "mongodb+srv://akhilraishetti21:ZIskZ9vYzFDvmhCx@cluster0.k8hw2z8.mongodb.net/ecommerce"; // or use your actual URI
-  await mongoose.connect(dbUri);
+  const db = await mongoose.connect(dbUri);
+  console.log(`db`, db);
 }, 15000); // Give 15s for slow startups
 
 afterAll(async () => {
