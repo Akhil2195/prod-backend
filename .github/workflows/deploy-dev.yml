@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run Jest Tests
+    name: Run Jest Testss
     runs-on: ubuntu-latest
 
     env: # 👈 Load .env equivalents
